@@ -64,7 +64,7 @@ jobs:
         run: |
           pnpm i
           pnpm run build
-          echo 'board.zash.run.place' > ./dist/CNAME
+          echo 'zashboard.web.yjhup.com' > ./dist/CNAME
 
       - name: Deploy 🚀
         uses: peaceiris/actions-gh-pages@v4
