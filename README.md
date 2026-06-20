@@ -75,8 +75,11 @@ dev:
    |---|---|
    | 项目名称 | `zashboard`（可自定义） |
    | 生产分支 | `main` |
-   | 构建命令（Framework preset 选 None） | `pnpm install && pnpm run build` |
+   | Framework preset（框架预设） | **None**（无）|
+   | 构建命令 | `pnpm install && pnpm run build` |
    | 构建输出目录 | `dist` |
+
+   > **为什么选 None？** Cloudflare 的预设（如 Vue、Vite）默认使用 `npm` 构建。本项目使用 `pnpm` 管理依赖，且构建命令需要完整执行 `pnpm install && pnpm run build`，因此选择 **None** 后手动填写构建命令最稳妥。如果你选择其他预设，请务必检查构建命令是否被自动覆盖。
 
 7. 点击 **"保存并部署"**（Save and Deploy）。Cloudflare 会自动拉取代码、构建并部署。
 
