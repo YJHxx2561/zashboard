@@ -56,13 +56,58 @@ dev:
 - [gh-pages-pingfang-only.zip (3.25 MB)](https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages-pingfang-only.zip)
 - [gh-pages-sarasa-only.zip (3.67 MB)](https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages-sarasa-only.zip)
 
-## **Docker Setup**
+## **部署到 Cloudflare Pages**
 
-To run zashboard via Docker, use the following command:
+### 方式一：通过 Cloudflare Dashboard 连接 Git 仓库（推荐）
 
+1. **Fork 本仓库** 到你的 GitHub 账户（如果不修改代码，也可以直接使用原仓库）。
+
+2. **登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)**，进入左侧菜单 **Workers 和 Pages** > **Pages**。
+
+3. 点击 **"创建项目"**（Create a project），然后选择 **"连接到 Git"**（Connect to Git）。
+
+4. **授权 GitHub 访问**：首次使用需要点击 **"连接 GitHub 账户"**，授权 Cloudflare 访问你的仓库。
+
+5. **选择仓库**：在列表中找到你 Fork 的 `zashboard` 仓库，点击 **"开始设置"**（Begin setup）。
+
+6. **配置构建设置**：
+   | 配置项 | 填写内容 |
+   |---|---|
+   | 项目名称 | `zashboard`（可自定义） |
+   | 生产分支 | `main` |
+   | 构建命令（Framework preset 选 None） | `pnpm install && pnpm run build` |
+   | 构建输出目录 | `dist` |
+
+7. 点击 **"保存并部署"**（Save and Deploy）。Cloudflare 会自动拉取代码、构建并部署。
+
+8. 部署完成后，Cloudflare 会提供一个 `*.pages.dev` 的默认域名，点击即可访问。
+
+### 方式二：本地上传构建产物（手动）
+
+如果你不想连接 Git，也可以在本地构建后手动上传：
+
+```bash
+# 1. 安装依赖并构建
+pnpm install
+pnpm run build
+
+# 2. 构建完成后，dist 文件夹即为部署产物
 ```
-docker run -d -p 80:80 ghcr.io/zephyruso/zashboard:latest
-```
+
+然后进入 Cloudflare Dashboard > Pages > **"创建项目"** > **"直接上传"**，将 `dist` 文件夹拖入上传即可。
+
+### 绑定自定义域名（可选）
+
+1. 进入 Cloudflare Pages 项目，点击 **"自定义域"**（Custom domains）。
+2. 点击 **"设置自定义域"**，输入你的域名（如 `dashboard.example.com`）。
+3. 按照提示在你的域名 DNS 中添加对应的 CNAME 记录。
+4. 等待证书自动签发完成，即可通过 HTTPS 访问你的域名。
+
+### 部署说明
+
+- 本项目使用 **hash 路由**（`createWebHashHistory`），因此不需要额外配置 SPA 路由回退规则。
+- `public/_headers` 文件已预置安全响应头和静态资源缓存策略，部署后自动生效。
+- 默认构建包含 **全部字体** 和 **sing-box 原生 API 支持**，如需其他构建版本可参考 `package.json` 中的 `build:*` 脚本自行修改构建命令。
 
 ## Tips
 
